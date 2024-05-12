@@ -13,7 +13,12 @@ func (c *Client) ListLocations(pageURL *string) (RespShallowLocations, error) {
 		url = *pageURL
 	}
 
-	resp, err := http.NewRequest(http.MethodGet, url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return RespShallowLocations{}, err
+	}
+
+	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return RespShallowLocations{}, err
 	}
