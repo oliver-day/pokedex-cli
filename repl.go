@@ -15,6 +15,18 @@ type cliCommand struct {
 	callback    func(*config) error
 }
 
+type config struct {
+	pokeapiClient    pokeapi.Client
+	nextLocationsURL *string
+	prevLocationsURL *string
+}
+
+func cleanInput(text string) []string {
+	output := strings.ToLower(text)
+	words := strings.Fields(output)
+	return words
+}
+
 func getCommands() map[string]cliCommand {
 	return map[string]cliCommand{
 		"exit": {
@@ -34,18 +46,6 @@ func getCommands() map[string]cliCommand {
 		},
 	}
 
-}
-
-func cleanInput(text string) []string {
-	output := strings.ToLower(text)
-	words := strings.Fields(output)
-	return words
-}
-
-type config struct {
-	pokeapiClient    pokeapi.Client
-	nextLocationsURL *string
-	prevLocationsURL *string
 }
 
 func startRepl(cfg *config) {
