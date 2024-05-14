@@ -6,7 +6,6 @@ import (
 )
 
 // Cache
-
 type Cache struct {
 	cache map[string]cacheEntry
 	mux   *sync.Mutex
@@ -15,6 +14,17 @@ type Cache struct {
 type cacheEntry struct {
 	createdAt time.Time
 	val       []byte
+}
+
+// NewCache - creates a new cache w/ configured reaping interval so the cache doesn't grow indefinitely
+func NewCache(interval time.Duration) Cache {
+	c := Cache{
+		cache: make(map[string]cacheEntry),
+		mux:   &sync.Mutex{},
+	}
+	go c.reapLoop(interval)
+
+	return c
 }
 
 // Cache helper functions
