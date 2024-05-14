@@ -16,3 +16,14 @@ type cacheEntry struct {
 	createdAt time.Time
 	val       []byte
 }
+
+// Cache helper functions
+func (c *Cache) reap(now time.Time, last time.Duration) {
+	c.mux.Lock()
+	defer c.mux.Unlock()
+	for key, val := range c.cache {
+		if val.createdAt.Before(now.Add(-last)) {
+			delete(c.cache, key)
+		}
+	}
+}
