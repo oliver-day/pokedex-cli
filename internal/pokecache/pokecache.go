@@ -27,3 +27,10 @@ func (c *Cache) reap(now time.Time, last time.Duration) {
 		}
 	}
 }
+
+func (c *Cache) reapLoop(interval time.Duration) {
+	ticker := time.NewTicker(interval)
+	for range ticker.C {
+		c.reap(time.Now().UTC(), interval)
+	}
+}
