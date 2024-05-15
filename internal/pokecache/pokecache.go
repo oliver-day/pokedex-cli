@@ -27,6 +27,16 @@ func NewCache(interval time.Duration) Cache {
 	return c
 }
 
+// Add - adds a value to the cache
+func (c *Cache) Add(key string, value []byte) {
+	c.mux.Lock()
+	defer c.mux.Unlock()
+	c.cache[key] = cacheEntry{
+		createdAt: time.Now().UTC(),
+		val:       value,
+	}
+}
+
 // Cache helper functions
 func (c *Cache) reap(now time.Time, last time.Duration) {
 	c.mux.Lock()
