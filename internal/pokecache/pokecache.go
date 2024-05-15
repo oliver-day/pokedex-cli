@@ -37,6 +37,14 @@ func (c *Cache) Add(key string, value []byte) {
 	}
 }
 
+// Get - gets a value from the cache
+func (c *Cache) Get(key string) ([]byte, bool) {
+	c.mux.Lock()
+	defer c.mux.Unlock()
+	val, ok := c.cache[key]
+	return val.val, ok
+}
+
 // Cache helper functions
 func (c *Cache) reap(now time.Time, last time.Duration) {
 	c.mux.Lock()
